@@ -2,7 +2,7 @@
 """
 function that takes two arguments and return a concatened string
 >>> concat("egg", "shell")
-egg shell
+eggshell
 """
 
 
