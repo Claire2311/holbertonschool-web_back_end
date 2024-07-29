@@ -7,11 +7,10 @@ a float by the argument
 """
 
 from typing import Callable
-import math
 
 
 def make_multiplier(multiplier: float) -> Callable[[float], float]:
-    """eturn a function that multiplies a float by the argument"""
-    def inner_function():
-        return math.pow(multiplier, 2)
+    """return a function that multiplies a float by the argument"""
+    def inner_function(num):
+        return num * multiplier
     return inner_function
