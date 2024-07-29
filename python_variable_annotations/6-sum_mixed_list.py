@@ -8,7 +8,7 @@ function that a list of floats and integer as argument and returns their sum
 from typing import List
 
 
-def sum_mixed_list(mxd_lst: List[float | int]) -> float:
+def sum_mixed_list(mxd_lst: List[Union[float, int]]) -> float:
     """return the sum of floats and integer"""
     a = 0
     for number in mxd_lst:
