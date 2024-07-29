@@ -10,6 +10,6 @@ from typing import Tuple, Union
 import math
 
 
-def to_kv(k: str, v: Union[int, float]) -> Tuple[Union[str, float]]:
+def to_kv(k: str, v: Union[int, float]) -> Tuple[str, float]:
     """return a tuple"""
     return (k, float(math.pow(v, 2)))
