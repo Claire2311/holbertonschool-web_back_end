@@ -5,7 +5,7 @@ function that a list of floats and integer as argument and returns their sum
 679.13
 """
 
-from typing import List
+from typing import List, Union
 
 
 def sum_mixed_list(mxd_lst: List[Union[float, int]]) -> float:
