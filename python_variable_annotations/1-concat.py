@@ -8,4 +8,4 @@ egg shell
 
 def concat(str1: str, str2: str) -> str:
     """return a concatened string of a and b which are string"""
-    return str1 + ' ' + str2
+    return str1 + str2
