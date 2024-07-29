@@ -5,8 +5,10 @@ function that a list of floats as argument and returns their sum
 6.470000000000001
 """
 
+from typing import List
 
-def sum_list(input_list: list[float]) -> float:
+
+def sum_list(input_list: List[float]) -> float:
     """return the sum of floats"""
     a = 0
     for number in input_list:
