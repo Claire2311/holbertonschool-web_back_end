@@ -15,7 +15,7 @@ class BasicCache(BaseCaching):
     def put(self, key, item):
         """add key/value in the dictionnary"""
         if not key or not item:
-            pass
+            return
         self.cache_data[key] = item
 
     def get(self, key):
