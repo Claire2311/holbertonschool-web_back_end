@@ -11,10 +11,8 @@ def filter_datum(
     fields: List[str], redaction: str, message: str, separator: str
 ):
     """return the log message obfuscated"""
-    loggin_messages = message.split(separator)
-    for i in range(len(loggin_messages)):
-        if loggin_messages[i].startswith(tuple(fields)):
-            loggin_messages[i] = re.sub(
-                "(?<==).*$", redaction, loggin_messages[i]
-                )
-    return separator.join(loggin_messages)
+    log_msges = message.split(separator)
+    for index, log_msg in enumerate(log_msges):
+        if log_msg.startswith(tuple(fields)):
+            log_msges[index] = re.sub("(?<==).*$", redaction, log_msg)
+    return separator.join(log_msges)
