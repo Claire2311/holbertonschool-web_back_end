@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-""" return the log message obfuscated"""
+"""return the log message obfuscated"""
 
 from typing import List
 import re
 import logging
+import os
+import mysql.connector
 
 PII_FIELDS = ("name", "email", "ssn", "password", "ip")
 
@@ -50,3 +52,18 @@ def get_logger() -> logging.Logger:
     logger.addHandler(streamHandler)
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """connection to the database"""
+    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password_db = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host_db = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    database_name = os.environ.get("PERSONAL_DATA_DB_NAME")
+    cnx = mysql.connector.connect(
+        user=username,
+        password=password_db,
+        host=host_db,
+        database=database_name
+    )
+    return cnx
