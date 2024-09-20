@@ -7,7 +7,7 @@ import logging
 import os
 import mysql.connector
 
-PII_FIELDS = ("name", "email", "ssn", "password", "ip")
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 class RedactingFormatter(logging.Formatter):
@@ -67,3 +67,14 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         database=database_name
     )
     return cnx
+
+
+def main():
+    """main function"""
+    cnx = get_db()
+    cursor = cnx.cursor()
+    query = "SELECT * FROM users"
+    cursor.execute(query)
+    format(cursor)
+    cursor.close()
+    cnx.close()
