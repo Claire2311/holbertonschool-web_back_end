@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-""" return the log message obfuscated
-"""
-
+""" return the log message obfuscated"""
 
 import re
 
