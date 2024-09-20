@@ -34,4 +34,4 @@ def filter_datum(
     for index, log_msg in enumerate(log_msges):
         if log_msg.startswith(tuple(fields)):
             log_msges[index] = re.sub("(?<==).*$", redaction, log_msg)
-    return separator.join(log_msges)
+    return f"{separator} ".join(log_msges)
