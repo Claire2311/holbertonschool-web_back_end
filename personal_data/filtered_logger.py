@@ -19,6 +19,7 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """filter values in incoming log records"""
         original_message = super().format(record)
         redacted_message = filter_datum(
             self.fields, self.REDACTION, original_message, self.SEPARATOR
@@ -30,7 +31,8 @@ def filter_datum(
     fields: List[str], redaction: str, message: str, separator: str
 ) -> str:
     """return the log message obfuscated"""
-    return separator.join(
-        re.sub("(?<==).*$", redaction, log_msg) if log_msg.startswith(tuple(fields)) else log_msg
-        for log_msg in message.split(separator)
-    )
+    log_msges = message.split(separator)
+    for index, log_msg in enumerate(log_msges):
+        if log_msg.startswith(tuple(fields)):
+            log_msges[index] = re.sub("(?<==).*$", redaction, log_msg)
+    return f"{separator}".join(log_msges)
