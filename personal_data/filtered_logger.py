@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""return the log message obfuscated"""
+""" return the log message obfuscated"""
 
 from typing import List
 import re
 import logging
-import os
-# import mysql.connector
-
-PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 class RedactingFormatter(logging.Formatter):
@@ -30,50 +26,11 @@ class RedactingFormatter(logging.Formatter):
         return redacted_message
 
 
-def filter_datum(fields: List[str], redaction: str, message: str,
-                  separator: str) -> str:
+def filter_datum(
+    fields: List[str], redaction: str, message: str, separator: str
+) -> str:
     """return the log message obfuscated"""
     return separator.join(
         re.sub("(?<==).*$", redaction, log_msg) if log_msg.startswith(tuple(fields)) else log_msg
         for log_msg in message.split(separator)
     )
-
-
-def get_logger() -> logging.Logger:
-    """get a logger message"""
-    logger = logging.getLogger('user_data')
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    streamHandler = logging.StreamHandler()
-    streamHandler.setFormatter(RedactingFormatter(PII_FIELDS))
-    logger.addHandler(streamHandler)
-
-    return logger
-
-
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """connection to the database"""
-    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    password_db = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host_db = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    database_name = os.environ.get("PERSONAL_DATA_DB_NAME")
-    cnx = mysql.connector.connect(
-        user=username,
-        password=password_db,
-        host=host_db,
-        database=database_name
-    )
-    return cnx
-
-
-def main() -> None:
-    """main function"""
-    cnx = get_db()
-    cursor = cnx.cursor()
-    query = "SELECT * FROM users"
-    cursor.execute(query)
-    logger = get_logger()
-    format(cursor)
-    cursor.close()
-    cnx.close()
