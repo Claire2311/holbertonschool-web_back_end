@@ -5,7 +5,7 @@ from typing import List
 import re
 import logging
 import os
-import mysql.connector
+# import mysql.connector
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -30,15 +30,13 @@ class RedactingFormatter(logging.Formatter):
         return redacted_message
 
 
-def filter_datum(
-    fields: List[str], redaction: str, message: str, separator: str
-) -> str:
+def filter_datum(fields: List[str], redaction: str, message: str,
+                  separator: str) -> str:
     """return the log message obfuscated"""
-    log_msges = message.split(separator)
-    for index, log_msg in enumerate(log_msges):
-        if log_msg.startswith(tuple(fields)):
-            log_msges[index] = re.sub("(?<==).*$", redaction, log_msg)
-    return separator.join(log_msges)
+    return separator.join(
+        re.sub("(?<==).*$", redaction, log_msg) if log_msg.startswith(tuple(fields)) else log_msg
+        for log_msg in message.split(separator)
+    )
 
 
 def get_logger() -> logging.Logger:
@@ -69,12 +67,13 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     return cnx
 
 
-def main():
+def main() -> None:
     """main function"""
     cnx = get_db()
     cursor = cnx.cursor()
     query = "SELECT * FROM users"
     cursor.execute(query)
+    logger = get_logger()
     format(cursor)
     cursor.close()
     cnx.close()
