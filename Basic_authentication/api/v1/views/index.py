@@ -30,3 +30,9 @@ def stats() -> str:
 def get_unauthorized_error():
     """GET an error message when unauthorized"""
     abort(401)
+
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def get_unauthorized_access():
+    """GET an error message when not authorized to access to a ressource"""
+    abort(403)
