@@ -6,7 +6,6 @@ from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
-import os
 
 
 app = Flask(__name__)
@@ -39,14 +38,8 @@ def fordidden(error) -> str:
     return jsonify({"error": "Forbidden"}), 403
 
 
-if __name__ == "__main__":
-    host = getenv("API_HOST", "0.0.0.0")
-    port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
-
-
 @app.before_request
-def handling_before_request() -> str:
+def before_request() -> None:
     """Handling the requests"""
     if auth is None:
         return
@@ -61,3 +54,9 @@ def handling_before_request() -> str:
 
     if auth.current_user(request) is None:
         abort(403)
+
+
+if __name__ == "__main__":
+    host = getenv("API_HOST", "0.0.0.0")
+    port = getenv("API_PORT", "5000")
+    app.run(host=host, port=port)
