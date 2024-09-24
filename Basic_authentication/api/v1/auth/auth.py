@@ -2,8 +2,8 @@
 """class to handle basic authentication"""
 
 
-from flask import request
 from typing import List, TypeVar
+from flask import request
 
 
 class Auth:
@@ -31,7 +31,12 @@ class Auth:
 
     def authorization_header(self, request=None) -> str:
         """manager authorization header"""
-        return None
+        if request is None:
+            return None
+        if 'Authorization' in request.headers:
+            return request.headers.get('Authorization')
+        else:
+            return None
 
     def current_user(self, request=None) -> TypeVar('User'):
         """manage current user"""
