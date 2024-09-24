@@ -34,8 +34,7 @@ class BasicAuth(Auth):
             return None
 
         try:
-            base64.b64encode(base64.b64decode(base64_authorization_header)) == base64_authorization_header
+            decoded_bytes = base64.b64decode(base64_authorization_header)
+            return decoded_bytes.decode('utf-8')
         except Exception:
             return None
-        else:
-            return base64_authorization_header.decode('utf-8')
