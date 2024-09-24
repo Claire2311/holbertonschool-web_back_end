@@ -3,7 +3,7 @@
 Route module for the API
 """
 from os import getenv
-from api.v1.views import app_views, Auth
+from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
@@ -44,15 +44,12 @@ if __name__ == "__main__":
     app.run(host=host, port=port)
 
 
+@app.before_request
 def handling_before_request() -> str:
     """Handling the requests"""
     if auth is None:
         pass
 
-    print(auth.require_auth(
-        request.path,
-        ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    ))
     if auth.require_auth(
         request.path,
         ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
