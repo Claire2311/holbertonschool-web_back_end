@@ -30,7 +30,7 @@ class BasicAuth(Auth):
         returns the decoded value of a Base64 string
         base64_authorization_header
         """
-        if (base64_authorization_header is None or 
+        if (base64_authorization_header is None or
                 not isinstance(base64_authorization_header, str)):
             return None
 
