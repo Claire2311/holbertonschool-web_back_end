@@ -32,3 +32,19 @@ class Auth:
         hashed_password = _hash_password(password)
         user = self._db.add_user(email, hashed_password)
         return user
+# Nous utilisons try/catch car si find_user_by ne trouve pas d'utilisateur,
+# une exception NoResultFound serait levée, interrompant le programme.
+# Le bloc try/except permet d'éviter cela en capturant l'exception
+# et en permettant la création d'un nouvel utilisateur.
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """check password"""
+        try:
+            user = self._db.find_user_by(email=email)
+            if user:
+                if bcrypt.checkpw(password.encode(), user.hashed_password):
+                    return True
+                else:
+                    return False
+        except NoResultFound:
+            return False
