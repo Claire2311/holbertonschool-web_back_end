@@ -41,7 +41,7 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """
-        takes in arbitrary keyword arguments and returns the first row found 
+        takes in arbitrary keyword arguments and returns the first row found
         in the users table as filtered by the method’s input arguments
         """
         try:
@@ -54,16 +54,17 @@ class DB:
         except InvalidRequestError as e:
             raise InvalidRequestError("Invalid query arguments") from e
 
-    def update_user(self, user_id, **kwargs) -> None:
-        """update an user in the DB"""
-        user_to_update = self.find_user_by(id=user_id)
-
-        user_columns = {
-            column.key for column in inspect(User).mapper.column_attrs
-        }
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update a user in the DB"""
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise NoResultFound("No user found with the given criteria")
 
         for key, value in kwargs.items():
-            if key not in user_columns:
-                raise ValueError
-            setattr(user_to_update, key, value)
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError(f"Invalid attribute: {key}")
+
         self._session.commit()
