@@ -36,15 +36,12 @@ def login() -> str:
     """create a new session"""
     email = request.form['email']
     password = request.form['password']
-    print(AUTH.valid_login(email, password))
     if not AUTH.valid_login(email, password):
         abort(401)
     session_id = AUTH.create_session(email)
-    print(session_id)
     res = make_response(
         jsonify({"message": "Login in", "email": email})
     )
-    print(res)
     res.set_cookie("session_id", session_id)
     return res
 
