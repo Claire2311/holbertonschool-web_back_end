@@ -2,8 +2,8 @@
 """Management of authorization"""
 
 
-import bcrypt
 import uuid
+import bcrypt
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
@@ -52,4 +52,4 @@ class Auth:
 
     def _generate_uuid(self) -> str:
         """generate a new uuid"""
-        return uuid.uuid4()
+        return str(uuid.uuid4())
