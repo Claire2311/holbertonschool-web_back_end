@@ -1,2 +1,5 @@
 Basic_authentication
 .DS_Store
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
