@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine, insert
+from sqlalchemy import create_engine, insert, Column, inspect
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -53,3 +53,17 @@ class DB:
             raise NoResultFound("No user found with the given criteria") from e
         except InvalidRequestError as e:
             raise InvalidRequestError("Invalid query arguments") from e
+
+    def update_user(self, user_id, **kwargs) -> None:
+        """update an user in the DB"""
+        user_to_update = self.find_user_by(id=user_id)
+
+        user_columns = {
+            column.key for column in inspect(User).mapper.column_attrs
+        }
+
+        for key, value in kwargs.items():
+            if key not in user_columns:
+                raise ValueError
+            setattr(user_to_update, key, value)
+        self._session.commit()
