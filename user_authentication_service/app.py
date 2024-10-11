@@ -13,7 +13,7 @@ AUTH = Auth()
 
 
 @app.route('/')
-def welcome():
+def welcome() -> str:
     """welcome message"""
     return jsonify({"message": "Bienvenue"})
 
@@ -40,7 +40,7 @@ def login() -> str:
         abort(401)
     session_id = AUTH.create_session(email)
     res = make_response(
-        jsonify({"message": "Login in", "email": email})
+        jsonify({"email": email, "message": "logged in"})
     )
     res.set_cookie("session_id", session_id)
     return res
