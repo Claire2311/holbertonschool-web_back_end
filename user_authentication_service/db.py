@@ -50,8 +50,8 @@ class DB:
             if user is None:
                 raise NoResultFound
             return user
-        # except NoResultFound:
-        #     raise NoResultFound
+        except NoResultFound:
+            raise NoResultFound
         except InvalidRequestError:
             raise InvalidRequestError
 
