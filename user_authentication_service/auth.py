@@ -76,6 +76,17 @@ class Auth:
         except NoResultFound:
             return None
 
+    def get_reset_password_token(self, email: str) -> str:
+        """reset password token"""
+        try:
+            user = self._db.find_user_by(email=email)
+            if user:
+                new_token = _generate_uuid()
+                self._db.update_user(user.id, reset_token=new_token)
+                return new_token
+        except NoResultFound:
+            raise ValueError
+
     def destroy_session(self, user_id: int) -> None:
         """destroy the current session"""
         self._db.update_user(user_id, session_id=None)
