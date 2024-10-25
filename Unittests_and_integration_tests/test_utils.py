@@ -3,7 +3,8 @@
 """
 
 import unittest
-from utils import access_nested_map
+from unittest.mock import patch, Mock
+from utils import access_nested_map, get_json
 from parameterized import parameterized
 
 
@@ -40,6 +41,33 @@ class TestAccessNestedMap(unittest.TestCase):
             access_nested_map(nested_map, path)
         # On vérifie que le msg de l'exception correspond à la clé manquante
         self.assertEqual(str(context.exception), f"'{path[-1]}'")
+
+
+class TestGetJson(unittest.TestCase):
+    """class to test the get_json func"""
+    @patch('utils.requests.get')
+    def test_get_json(self, mock_get):
+        """test the function"""
+        test_cases = [
+            ("http://example.com", {"payload": True}),
+            ("http://holberton.io", {"payload": False})
+        ]
+
+        for test_url, test_payload in test_cases:
+            # Configuration du Mock pour chaque test
+            mock_response = Mock()
+            mock_response.json.return_value = test_payload
+            mock_get.return_value = mock_response
+
+            # Appel de get_json et vérification des résultats
+            result = get_json(test_url)
+            self.assertEqual(result, test_payload)
+
+            # Vérification que requests.get a été appelé 1 fois avec le bon URL
+            mock_get.assert_called_once_with(test_url)
+
+            # Réinitialiser le mock pour le prochain cas de test
+            mock_get.reset_mock()
 
 
 if __name__ == "__main__":
