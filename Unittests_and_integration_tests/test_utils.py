@@ -4,7 +4,7 @@
 
 import unittest
 from unittest.mock import patch, Mock
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 from parameterized import parameterized
 
 
@@ -68,6 +68,30 @@ class TestGetJson(unittest.TestCase):
 
             # Réinitialiser le mock pour le prochain cas de test
             mock_get.reset_mock()
+
+
+class TestMemoize(unittest.TestCase):
+    """Use of Memoization"""
+    def test_memoize(self):
+        """test the memoize function"""
+        class TestClass:
+            """class to test the function"""
+            def a_method(self):
+                """method to test"""
+                return 42
+
+            @memoize
+            def a_property(self):
+                """property to test"""
+                return self.a_method()
+
+        test_instance = TestClass()
+        # Vérification que la méthode est appelée la première fois
+        self.assertEqual(test_instance.a_property, 42)  # 42
+        # Vérification que la méthode n'est pas appelée la deuxième fois
+        with patch.object(TestClass, 'a_method') as mock_method:
+            self.assertEqual(test_instance.a_property, 42)
+            mock_method.assert_not_called()
 
 
 if __name__ == "__main__":
