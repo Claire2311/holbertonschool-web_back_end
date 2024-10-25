@@ -18,15 +18,28 @@ class TestAccessNestedMap(unittest.TestCase):
         """test the access_nested_map func"""
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
+    # Ma proposition qui est passée sur le cheker
+    # @parameterized.expand([
+    #     ({}, ("a"), None),
+    #     ({"a": 1}, ("a", "b"), None),
+    # ])
+    # def test_access_nested_map_exception(self, nested_map, path, expected):
+    #     """test the raising of error of the func"""
+    #     if expected is None:
+    #         with self.assertRaises(KeyError):
+    #             access_nested_map(nested_map, path)
+
+    # Solution proposée par ChatGPT
     @parameterized.expand([
-        ({}, ("a"), None),
-        ({"a": 1}, ("a", "b"), None),
+        ({}, ("a")),
+        ({"a": 1}, ("a", "b")),
     ])
-    def test_access_nested_map_exception(self, nested_map, path, expected):
+    def test_access_nested_map_exception(self, nested_map, path):
         """test the raising of error of the func"""
-        if expected is None:
-            with self.assertRaises(KeyError):
-                access_nested_map(nested_map, path)
+        with self.assertRaises(KeyError) as context:
+            access_nested_map(nested_map, path)
+        # On vérifie que le msg de l'exception correspond à la clé manquante
+        self.assertEqual(str(context.exception), f"'{path[-1]}'")
 
 
 if __name__ == "__main__":
