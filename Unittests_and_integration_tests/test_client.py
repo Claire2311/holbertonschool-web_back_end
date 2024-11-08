@@ -3,9 +3,10 @@
 """
 
 import unittest
-from unittest.mock import patch, PropertyMock
-from parameterized import parameterized
+from unittest.mock import patch, PropertyMock, Mock
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -75,3 +76,44 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(
             GithubOrgClient.has_license(repo, license_key), expected
         )
+
+@parameterized_class(("org_payload",
+                      "repos_payload",
+                      "expected_repos",
+                      "apache2_repos"), TEST_PAYLOAD)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """ Integration test class for GithubOrgClient.public_repos
+    """
+    @classmethod
+    def setUpClass(cls):
+        """ Setup the mocks and the patcher
+        """
+        mock_repos = Mock()
+        mock_repos.json.return_value = cls.repos_payload
+        url_map = {cls.org_payload["repos_url"]: mock_repos}
+
+        mock_org = Mock()
+        mock_org.json.return_value = cls.org_payload
+
+        cls.get_patcher = patch("requests.get")
+        cls.get_patcher.start().side_effect = lambda url: url_map.get(url,
+                                                                      mock_org)
+
+    @classmethod
+    def tearDownClass(cls):
+        """ Stop the patcher
+        """
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """ Test output of GithubOrgClient.public_repos
+        """
+        client = GithubOrgClient("test_org")
+        self.assertEqual(client.public_repos(), self.expected_repos)
+        self.assertEqual(client.public_repos("WRONG_LICENSE"), [])
+
+    def test_public_repos_with_license(self):
+        """ Test output of GithubOrgClient.public_repos with license
+        """
+        client = GithubOrgClient("test_org")
+        self.assertEqual(client.public_repos("apache-2.0"), self.apache2_repos)
