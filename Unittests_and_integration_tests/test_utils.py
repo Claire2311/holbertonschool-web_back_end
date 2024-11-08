@@ -71,27 +71,38 @@ class TestGetJson(unittest.TestCase):
 
 
 class TestMemoize(unittest.TestCase):
-    """Use of Memoization"""
+    """Tests for the memoize decorator"""
     def test_memoize(self):
-        """test the memoize function"""
+        """Test that the memoize decorator caches the result of a method"""
+
         class TestClass:
-            """class to test the function"""
+            """Class to test the memoize decorator"""
+
             def a_method(self):
-                """method to test"""
+                """Method to be memoized"""
                 return 42
 
             @memoize
             def a_property(self):
-                """property to test"""
+                """Property that uses the memoize decorator"""
                 return self.a_method()
 
-        test_instance = TestClass()
-        # Vérification que la méthode est appelée la première fois
-        self.assertEqual(test_instance.a_property, 42)  # 42
-        # Vérification que la méthode n'est pas appelée la deuxième fois
-        with patch.object(TestClass, 'a_method') as mock_method:
-            self.assertEqual(test_instance.a_property, 42)
-            mock_method.assert_not_called()
+        # Patch the a_method to ensure it is only called once
+        with patch.object(TestClass,
+                          "a_method",
+                          return_value=42) as mock_method:
+            test_obj = TestClass()
+
+            # Call the memoized property twice
+            result1 = test_obj.a_property
+            result2 = test_obj.a_property
+
+            # Check that the results are as expected
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+
+            # Ensure that a_method was only called once
+            mock_method.assert_called_once()
 
 
 if __name__ == "__main__":
