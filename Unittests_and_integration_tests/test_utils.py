@@ -51,14 +51,13 @@ class TestGetJson(unittest.TestCase):
     ])
     def test_get_json(self, test_url, test_payload):
         """test the get_json function"""
-        with patch.object("utils.resquests.get") as mock_get_json:
+        with patch("utils.resquests.get") as mock_get_json:
             mock_return = Mock()
             mock_return.json.return_value = test_payload
             mock_get_json.return_value = mock_return
 
             self.assertEqual(get_json(test_url), test_payload)
             mock_get_json.assert_called_once_with(test_url)
-
 
     # @patch("requests.get")
     # def test_get_json(self, mock_get):
@@ -78,7 +77,7 @@ class TestGetJson(unittest.TestCase):
     #         result = get_json(test_url)
     #         self.assertEqual(result, test_payload)
 
-    #         # Vérification que requests.get a été appelé 1 fois avec le bon URL
+    #         # Vérification que requests.get a été appelé 1 fois av le bon URL
     #         mock_get.assert_called_once_with(test_url)
 
     #         # Réinitialiser le mock pour le prochain cas de test
