@@ -13,8 +13,8 @@ class TestGithubOrgClient(unittest.TestCase):
     """unittest class to implement test for client.py"""
 
     @parameterized.expand([
-        ("google", {"repos_url": "https://api.github.com/orgs/google/repos"}),
-        ("abc", {"repos_url": "https://api.github.com/orgs/abc/repos"})
+        ("google", {"repos_url": "https://api.github.com/orgs/google"}),
+        ("abc", {"repos_url": "https://api.github.com/orgs/abc"})
     ])
     @patch('client.get_json')
     def test_org(self, org_name, expected, mock_get_json):
