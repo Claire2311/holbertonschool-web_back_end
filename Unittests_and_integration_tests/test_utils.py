@@ -45,29 +45,44 @@ class TestAccessNestedMap(unittest.TestCase):
 
 class TestGetJson(unittest.TestCase):
     """class to test the get_json func"""
-    @patch("requests.get")
-    def test_get_json(self, mock_get):
-        """test the function"""
-        test_cases = [
-            ("http://example.com", {"payload": True}),
-            ("http://holberton.io", {"payload": False})
-        ]
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    def test_get_json(self, test_url, test_payload):
+        """test the get_json function"""
+        with patch.object("utils.resquests.get") as mock_get_json:
+            mock_return = Mock()
+            mock_return.json.return_value = test_payload
+            mock_get_json.return_value = mock_return
 
-        for test_url, test_payload in test_cases:
-            # Configuration du Mock pour chaque test
-            mock_response = Mock()
-            mock_response.json.return_value = test_payload
-            mock_get.return_value = mock_response
+            self.assertEqual(get_json(test_url), test_payload)
+            mock_get_json.assert_called_once_with(test_url)
 
-            # Appel de get_json et vérification des résultats
-            result = get_json(test_url)
-            self.assertEqual(result, test_payload)
 
-            # Vérification que requests.get a été appelé 1 fois avec le bon URL
-            mock_get.assert_called_once_with(test_url)
+    # @patch("requests.get")
+    # def test_get_json(self, mock_get):
+    #     """test the function"""
+    #     test_cases = [
+    #         ("http://example.com", {"payload": True}),
+    #         ("http://holberton.io", {"payload": False})
+    #     ]
 
-            # Réinitialiser le mock pour le prochain cas de test
-            mock_get.reset_mock()
+    #     for test_url, test_payload in test_cases:
+    #         # Configuration du Mock pour chaque test
+    #         mock_response = Mock()
+    #         mock_response.json.return_value = test_payload
+    #         mock_get.return_value = mock_response
+
+    #         # Appel de get_json et vérification des résultats
+    #         result = get_json(test_url)
+    #         self.assertEqual(result, test_payload)
+
+    #         # Vérification que requests.get a été appelé 1 fois avec le bon URL
+    #         mock_get.assert_called_once_with(test_url)
+
+    #         # Réinitialiser le mock pour le prochain cas de test
+    #         mock_get.reset_mock()
 
 
 class TestMemoize(unittest.TestCase):
