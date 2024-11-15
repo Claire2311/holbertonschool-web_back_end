@@ -44,7 +44,8 @@ def get_timezone():
             return app.config['BABEL_DEFAULT_TIMEZONE']
 
     if g.user:
-        if g.user.get("timezone") is not None:
+        timezone = g.user.get("timezone")
+        if timezone is not None:
             try:
                 tz = pytz.timezone(timezone)
                 return tz
