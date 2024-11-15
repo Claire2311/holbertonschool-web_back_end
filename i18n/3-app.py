@@ -29,7 +29,7 @@ babel.init_app(app, locale_selector=get_locale)
 def hello() -> str:
     """ return index template
     """
-    return render_template("0-index.html")
+    return render_template("3-index.html")
 
 
 if __name__ == "__main__":
