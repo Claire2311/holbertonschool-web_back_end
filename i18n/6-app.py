@@ -24,7 +24,6 @@ def get_locale():
         return locale
     elif (g.user["locale"] is not None and
           g.user["locale"] in app.config['LANGUAGES']):
-        print("g.user['locale']", g.user["locale"])
         return g.user["locale"]
     elif (request.headers.get('locale') is not None and
           request.headers.get('locale') in app.config['LANGUAGES']):
