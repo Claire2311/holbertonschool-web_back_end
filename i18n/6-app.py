@@ -22,14 +22,13 @@ def get_locale():
     locale = request.args.get('locale')
     if locale is not None and locale in app.config['LANGUAGES']:
         return locale
-    elif (g.user["locale"] is not None and
-          g.user["locale"] in app.config['LANGUAGES']):
-        return g.user["locale"]
-    elif (request.headers.get('locale') is not None and
-          request.headers.get('locale') in app.config['LANGUAGES']):
-        return request.headers.get('locale')
-    else:
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+    if g.user:
+        if (g.user.get("locale") is not None and
+                g.user.get("locale") in app.config['LANGUAGES']):
+            return g.user.get("locale")
+
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 users = {
