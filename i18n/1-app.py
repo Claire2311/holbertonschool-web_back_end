@@ -5,7 +5,14 @@ from flask import Flask, render_template, request
 from flask_babel import Babel
 
 
+class Config:
+    """configuration of languages"""
+    LANGUAGES = ["en", "fr"]
+
+
 app = Flask(__name__)
+app.config['BABEL_DEFAULT_LOCALE'] = "en"
+app.config['BABEL_DEFAULT_TIMEZONE'] = "UTC"
 babel = Babel(app)
 
 
@@ -14,15 +21,6 @@ def hello() -> str:
     """ return index template
     """
     return render_template("0-index.html")
-
-
-class Config:
-    """configuration of languages"""
-    LANGUAGES = ["en", "fr"]
-
-
-app.config['BABEL_DEFAULT_LOCALE'] = "en"
-app.config['BABEL_DEFAULT_TIMEZONE'] = "UTC"
 
 
 if __name__ == "__main__":
