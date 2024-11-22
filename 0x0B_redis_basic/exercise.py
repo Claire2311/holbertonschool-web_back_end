@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """exercise"""
-import redis
 import uuid
+from typing import Union
+import redis
 
 
 class Cache:
@@ -11,7 +12,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """generate a key, store the input data in Redis and return the key"""
         key = str(uuid.uuid4())
         cache = Cache()
