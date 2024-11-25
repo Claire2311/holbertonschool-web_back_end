@@ -12,7 +12,8 @@ def count_calls(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(self):
         key = Cache.store.__qualname__
-        self._redis.incr(key)
+        print(key)
+        return self._redis.incr(key)
 
 
 class Cache:
