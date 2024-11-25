@@ -1,5 +1,5 @@
--- Active: 1689179452290@@127.0.0.1@3306@holberton
 -- Create a table
+-- with only some possible countries
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
