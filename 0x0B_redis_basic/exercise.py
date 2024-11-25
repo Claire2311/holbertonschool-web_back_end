@@ -10,10 +10,13 @@ import redis
 def count_calls(fn: Callable) -> Callable:
     """count how many times methods of the Cache class are called"""
     @wraps(fn)
-    def wrapper(self):
+    def wrapper(self, *args, **kwargs):
+        """inner function"""
+        # wrapper.calls += 1
         key = Cache.store.__qualname__
-        print(key)
-        return self._redis.incr(key)
+        self._redis.incr(key, 1)
+        return fn(*args, **kwargs)
+    return wrapper
 
 
 class Cache:
