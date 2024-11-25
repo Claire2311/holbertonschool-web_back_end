@@ -32,7 +32,7 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
-def replay(func):
+def replay(func: Callable) -> str:
     """display the history of calls of a particular function"""
     cache = func.__self__
     func_name = func.__qualname__
@@ -42,8 +42,6 @@ def replay(func):
     list_inputs = cache._redis.lrange(func_name + ':inputs', 0, -1)
     list_outputs = cache._redis.lrange(func_name + ':outputs', 0, -1)
 
-    # print(list_inputs)
-    # print(list_outputs)
     for input, output in zip(list_inputs, list_outputs):
         print("{fname}(*{finput}) -> {foutput}".format(
             fname=func_name,
