@@ -12,10 +12,9 @@ def count_calls(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(self, *args, **kwargs):
         """inner function"""
-        # wrapper.calls += 1
-        key = Cache.store.__qualname__
+        key = fn.__qualname__
         self._redis.incr(key, 1)
-        return fn(*args, **kwargs)
+        return fn(self, *args, **kwargs)
     return wrapper
 
 
