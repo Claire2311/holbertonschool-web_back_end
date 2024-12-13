@@ -16,12 +16,12 @@ describe("testsendPaymentRequestToApi", () => {
   it("should return 120", () => {
     sendPaymentRequestToApi(100, 20);
 
-    expect(consoleSpy.calledWith("The total is: 120")).to.be.true;
+    expect(consoleSpy.calledOnceWithExactly("The total is: 120")).to.be.true;
   });
 
   it("should return 20", () => {
     sendPaymentRequestToApi(10, 10);
 
-    expect(consoleSpy.calledWith("The total is: 20")).to.be.true;
+    expect(consoleSpy.calledOnceWithExactly("The total is: 20")).to.be.true;
   });
 });
