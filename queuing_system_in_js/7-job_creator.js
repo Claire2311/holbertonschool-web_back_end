@@ -60,8 +60,8 @@ for (const job of jobs) {
     console.log(`Notification job ${jobQueue.id} completed`);
   });
 
-  jobQueue.on("failed", function () {
-    console.log(`Notification job ${jobQueue.id} failed: ERROR`);
+  jobQueue.on("failed", function (err) {
+    console.log(`Notification job ${jobQueue.id} failed: ${err}`);
   });
 
   jobQueue.on("progress", function (progress) {
