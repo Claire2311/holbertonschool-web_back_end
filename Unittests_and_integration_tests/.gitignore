@@ -1,0 +1,6 @@
+Unittests_and_integration_tests
+__pycache__/
+.DS_Store
+client.py
+fixtures.py
+utils.py
